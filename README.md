@@ -11,10 +11,10 @@ scoring.
 
 ```
 Raw MiSeq data                    Reference FASTA
-(BCL or FASTQ)                         │
+(FASTQ)                                │
        │                               │
-       ▼                               ▼
-  [BCL→FASTQ]             [Build slippage hotspot map]
+       │                               ▼
+       │                  [Build slippage hotspot map]
        │                    (homopolymers + STRs)
        │                               │
        ▼                               │
@@ -77,11 +77,6 @@ sudo apt install bwa samtools bcftools tabix
 # Note: apt usually has older versions. conda is preferred.
 ```
 
-For BCL input mode only — install bcl-convert:
-```
-Download from: https://support.illumina.com/sequencing/sequencing_software/bcl-convert.html
-```
-
 ### 4. Install Python packages
 
 ```bash
@@ -112,31 +107,11 @@ python run_pipeline.py \
     --output ./results
 ```
 
-### Paired-end FASTQ
-
-```bash
-python run_pipeline.py \
-    --fastq1 sample_R1.fastq.gz \
-    --fastq2 sample_R2.fastq.gz \
-    --reference genome.fasta \
-    --output ./results
-```
-
-### From raw BCL run folder
-
-```bash
-python run_pipeline.py \
-    --bcl /path/to/MiSeqRunFolder \
-    --reference genome.fasta \
-    --output ./results
-```
-
 ### Full example with custom thresholds
 
 ```bash
 python run_pipeline.py \
-    --fastq1 reads_R1.fastq.gz \
-    --fastq2 reads_R2.fastq.gz \
+    --fastq reads.fastq.gz \
     --reference my_organism.fasta \
     --output ./results \
     --min-hp-len 6 \
@@ -155,11 +130,8 @@ python run_pipeline.py \
 ## All options
 
 ```
-Input (choose one mode):
+Input:
   --fastq FILE          Single-end FASTQ (.fastq or .fastq.gz)
-  --fastq1 FILE         Paired-end Read 1
-  --fastq2 FILE         Paired-end Read 2
-  --bcl DIR             Raw MiSeq BCL run folder
 
 Required:
   --reference FASTA     Reference genome FASTA
@@ -180,9 +152,6 @@ Mutation classification:
 Alignment:
   --aligner             bwa-mem2 / bwa / minimap2 (default: bwa-mem2)
   --threads N           CPU threads (default: 4)
-
-BCL:
-  --sample-sheet FILE   Override SampleSheet.csv path
 
 Misc:
   --keep-intermediates  Retain BAM and intermediate VCF files
